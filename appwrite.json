@@ -1,0 +1,18 @@
+{
+  "projectId": "647b927f416135cd4ef0",
+  "projectName": "Appwrite-Events-App",
+  "functions": [
+    {
+      "$id": "647d0274a6d02211feca",
+      "name": "Add event",
+      "runtime": "node-16.0",
+      "path": "functions/Add event",
+      "entrypoint": "src/index.js",
+      "ignore": ["node_modules", ".npm"],
+      "execute": ["any"],
+      "events": [],
+      "schedule": "",
+      "timeout": 15
+    }
+  ]
+}
