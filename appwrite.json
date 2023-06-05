@@ -21,7 +21,7 @@
       "path": "functions/Add session",
       "entrypoint": "src/index.js",
       "ignore": ["node_modules", ".npm"],
-      "execute": [],
+      "execute": ["any"],
       "events": [],
       "schedule": "",
       "timeout": 15
