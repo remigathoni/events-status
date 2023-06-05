@@ -1,46 +1,83 @@
 const sdk = require("node-appwrite");
 
-/*
-  'req' variable has:
-    'headers' - object with request headers
-    'payload' - request body data as a string
-    'variables' - object with function variables
-
-  'res' variable has:
-    'send(text, status)' - function to return text response. Status code defaults to 200
-    'json(obj, status)' - function to return JSON response. Status code defaults to 200
-
-  If an error is thrown, a response with code 500 will be returned.
-*/
-
 module.exports = async function (req, res) {
   const client = new sdk.Client();
-
-  // You can remove services you don't use
-  const account = new sdk.Account(client);
-  const avatars = new sdk.Avatars(client);
-  const database = new sdk.Databases(client);
-  const functions = new sdk.Functions(client);
-  const health = new sdk.Health(client);
-  const locale = new sdk.Locale(client);
-  const storage = new sdk.Storage(client);
-  const teams = new sdk.Teams(client);
-  const users = new sdk.Users(client);
+  const databases = new sdk.Databases(client);
+  const { ID } = require("node-appwrite");
 
   if (
-    !req.variables['APPWRITE_FUNCTION_ENDPOINT'] ||
-    !req.variables['APPWRITE_FUNCTION_API_KEY']
+    !req.variables["APPWRITE_FUNCTION_ENDPOINT"] ||
+    !req.variables["APPWRITE_FUNCTION_API_KEY"] ||
+    !req.variables["APPWRITE_FUNCTION_PROJECT_ID"]
   ) {
-    console.warn("Environment variables are not set. Function cannot use Appwrite SDK.");
-  } else {
-    client
-      .setEndpoint(req.variables['APPWRITE_FUNCTION_ENDPOINT'])
-      .setProject(req.variables['APPWRITE_FUNCTION_PROJECT_ID'])
-      .setKey(req.variables['APPWRITE_FUNCTION_API_KEY'])
-      .setSelfSigned(true);
+    res.json({ success: false, message: "Variables missing." });
+    return;
   }
 
-  res.json({
-    areDevelopersAwesome: true,
-  });
+  client
+    .setEndpoint(req.variables["APPWRITE_FUNCTION_ENDPOINT"])
+    .setProject(req.variables["APPWRITE_FUNCTION_PROJECT_ID"])
+    .setKey(req.variables["APPWRITE_FUNCTION_API_KEY"]);
+
+  try {
+    const payload = JSON.parse(req.payload ?? {});
+
+    const {
+      name,
+      venue,
+      startTime,
+      endTime,
+      resourceLink,
+      speakers,
+      databaseId,
+      collectionId,
+    } = payload;
+
+    if (!databaseId || !collectionId)
+      return res.json({
+        success: false,
+        message: "Missing database information",
+      });
+
+    // Check if required values are sent in request payload
+    if (!name)
+      return res.json({
+        success: false,
+        message: "Event name is required",
+      });
+    if (!venue)
+      return res.json({
+        success: false,
+        message: "Session venue is required",
+      });
+    if (!startTime || !endTime)
+      return res.json({
+        success: false,
+        message: "Session start time and end time required",
+      });
+    if (!(speakers.length > 0))
+      return res.json({
+        success: false,
+        message: "Add at least one speaker for the session",
+      });
+
+    await databases.createDocument(databaseId, collectionId, ID.unique(), {
+      name,
+      startTime,
+      endTime,
+      venue,
+      speakers,
+      resourceLink,
+    });
+
+    res.json({
+      success: true,
+      message: "Created new session",
+    });
+  } catch (e) {
+    res.json({
+      success: false,
+      message: "Unexpected error: " + e,
+    });
+  }
 };
