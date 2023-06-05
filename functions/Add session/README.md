@@ -1,26 +1,102 @@
-# add-session-func
+## Add session
+A cloud function that adds a session document in the session collection
 
-Welcome to the documentation of this function 👋 We strongly recommend keeping this file in sync with your function's logic to make sure anyone can easily understand your function in the future. If you don't need documentation, you can remove this file.
+**Endpoint:**
+POST https://cloud.appwrite.io/v1/functions/{functionId}/executions
 
-## 🤖 Documentation
+**Headers:**
 
-Simple function similar to typical "hello world" example, but instead, we return a simple JSON that tells everyone how awesome developers are.
+Content-Type: application/json
 
-<!-- Update with your description, for example 'Create Stripe payment and return payment URL' -->
+X-Appwrite-Project: {projectId}
 
-_Example input:_
+**Request Body:**
 
-This function expects no input
-
-<!-- If input is expected, add example -->
-
-_Example output:_
-
-<!-- Update with your expected output -->
 
 ```json
 {
- "areDevelopersAwesome": true
+  "data": {
+    "name": "string",
+    "venue": "string",
+    "startTime": "date",
+    "endTime": "date (optional)",
+    "speakers": "string[]",
+    "resourceLink": "resourceLink",
+    "collectionId": "string",
+    "databaseId": "string"
+  }
+}
+```
+Note: You have to stringify the data.
+**Response:**
+```json
+{
+  "success": "boolean",
+  "message": "string"
+}
+```
+
+**Example Usage:**
+
+```javascript
+
+const session = {
+  name: "Session name",
+  venue: "Session venue",
+  startTime: "dd-mm-yyyy hh:mm",
+  endTime: "dd-mm-yyyy hh:mm",
+  speakers: ["647b927f416135cd4ef0", "647b927f416135cd4ef0"], 
+  resourceLink: "https://resourceexample.com/1",
+  collectionId: `${collectionId}`,
+  databaseId: `${databaseId}`
+};
+
+const stringifiedSession = JSON.stringify(session);
+
+axios.post(
+  "https://cloud.appwrite.io/v1/functions/{functionId}/executions",
+  {
+    data: stringifiedSession,
+  },
+  {
+    headers: {
+      "Content-Type": "application/json",
+      "X-Appwrite-Project": `${projectId}`,
+    },
+  }
+)
+  .then((res) => {
+    console.log(res.data.response);
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+```
+
+**Sample Responses:**
+
+<u>Success</u>
+
+```json
+{
+  "success": true,
+  "message": "Created new session!"
+}
+```
+<u>Failure (If no name, start date, or venue is passed):</u>
+
+```json
+{
+  "success": false,
+  "message": "Session name required"
+}
+```
+<u>Failure (If date is wrongly formatted):</u>
+
+```json
+{
+  "success": false,
+  "message": "Unexpected error: Error: Invalid document structure: Attribute \"startDate\" has invalid type. DateTime::__construct(): Failed to parse time string (22=-04-2024) at position 0 (2): Unexpected character"
 }
 ```
 
@@ -30,7 +106,8 @@ List of environment variables used by this cloud function:
 
 - **APPWRITE_FUNCTION_ENDPOINT** - Endpoint of Appwrite project
 - **APPWRITE_FUNCTION_API_KEY** - Appwrite API Key
-<!-- Add your custom environment variables -->
+- **APPWRITE_PROJECT_ID** - Appwrite project Id
+
 
 ## 🚀 Deployment
 
