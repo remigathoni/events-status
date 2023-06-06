@@ -32,7 +32,8 @@ Note: You have to stringify the data.
 ```json
 {
   "success": "boolean",
-  "message": "string"
+  "message": "string",
+  "sessionId": "string" // document id of the created session
 }
 ```
 
@@ -80,7 +81,9 @@ axios.post(
 ```json
 {
   "success": true,
-  "message": "Created new session!"
+  "message": "Created new session!",
+  "sessionId": null
+
 }
 ```
 <u>Failure (If no name, start date, or venue is passed):</u>
@@ -88,7 +91,8 @@ axios.post(
 ```json
 {
   "success": false,
-  "message": "Session name required"
+  "message": "Session name required",
+  "sessionId": null
 }
 ```
 <u>Failure (If date is wrongly formatted):</u>
@@ -96,7 +100,8 @@ axios.post(
 ```json
 {
   "success": false,
-  "message": "Unexpected error: Error: Invalid document structure: Attribute \"startDate\" has invalid type. DateTime::__construct(): Failed to parse time string (22=-04-2024) at position 0 (2): Unexpected character"
+  "message": "Unexpected error: Error: Invalid document structure: Attribute \"startDate\" has invalid type. DateTime::__construct(): Failed to parse time string (22=-04-2024) at position 0 (2): Unexpected character",
+  "sessionId": null
 }
 ```
 
