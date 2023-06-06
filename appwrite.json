@@ -21,6 +21,18 @@
       "path": "functions/Add session",
       "entrypoint": "src/index.js",
       "ignore": ["node_modules", ".npm"],
+      "execute": [],
+      "events": [],
+      "schedule": "",
+      "timeout": 15
+    },
+    {
+      "$id": "647e0c107ec97a5d8ec5",
+      "name": "Add speaker",
+      "runtime": "node-16.0",
+      "path": "functions/Add speaker",
+      "entrypoint": "src/index.js",
+      "ignore": ["node_modules", ".npm"],
       "execute": ["any"],
       "events": [],
       "schedule": "",
