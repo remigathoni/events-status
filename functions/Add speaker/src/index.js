@@ -29,30 +29,39 @@ module.exports = async function (req, res) {
       return res.json({
         success: false,
         message: "Missing database information",
+        speakerId: null,
       });
     // Check if required values are sent in request payload
     if (!name)
       return res.json({
         success: false,
         message: "Speaker name is required",
+        speakerId: null,
       });
 
-    await databases.createDocument(databaseId, collectionId, ID.unique(), {
-      name,
-      title,
-      twitter,
-      linkedin,
-      imageUrl,
-    });
+    const response = await databases.createDocument(
+      databaseId,
+      collectionId,
+      ID.unique(),
+      {
+        name,
+        title,
+        twitter,
+        linkedin,
+        imageUrl,
+      }
+    );
 
     res.json({
       success: true,
       message: "Created new session",
+      speakerId: response.$id,
     });
   } catch (e) {
     res.json({
       success: false,
       message: "Unexpected error: " + e,
+      speakerId: null,
     });
   }
 };
