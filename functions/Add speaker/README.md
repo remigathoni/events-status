@@ -1,26 +1,91 @@
-# Add speaker
+## Add speaker
+A cloud function that adds a speaker document in the speaker collection
 
-Welcome to the documentation of this function 👋 We strongly recommend keeping this file in sync with your function's logic to make sure anyone can easily understand your function in the future. If you don't need documentation, you can remove this file.
+**Endpoint:**
+POST https://cloud.appwrite.io/v1/functions/{functionId}/executions
 
-## 🤖 Documentation
+**Headers:**
 
-Simple function similar to typical "hello world" example, but instead, we return a simple JSON that tells everyone how awesome developers are.
+Content-Type: application/json
 
-<!-- Update with your description, for example 'Create Stripe payment and return payment URL' -->
+X-Appwrite-Project: {projectId}
 
-_Example input:_
+**Request Body:**
 
-This function expects no input
-
-<!-- If input is expected, add example -->
-
-_Example output:_
-
-<!-- Update with your expected output -->
 
 ```json
 {
- "areDevelopersAwesome": true
+  "data": {
+    "name": "string",
+    "title": "string",
+    "linkedin": "string",
+    "twitter": "string",
+    "imageUrl": "string"
+  }
+}
+```
+Note: You have to stringify the data.
+**Response:**
+```json
+{
+  "success": "boolean",
+  "message": "string",
+  "speakerId": "string"
+}
+```
+
+**Example Usage:**
+
+```javascript
+
+const speaker = {
+  name: "Jane Doe",
+  title: "Software Developer",
+  linkedin: "https://linkedin.com/",
+  twitter: "https://twitter.com/",
+  imageUrl: "https://cloud.appwrite.com/image"
+};
+
+const stringifiedSpeaker = JSON.stringify(speaker);
+
+axios.post(
+  "https://cloud.appwrite.io/v1/functions/{functionId}/executions",
+  {
+    data: stringifiedSpeaker,
+  },
+  {
+    headers: {
+      "Content-Type": "application/json",
+      "X-Appwrite-Project": `${projectId}`,
+    },
+  }
+)
+  .then((res) => {
+    console.log(res.data.response);
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+```
+
+**Sample Responses:**
+
+<u>Success</u>
+
+```json
+{
+  "success": true,
+  "message": "Created new speaker!",
+  "speakerId": "647b927f416135cd4ef0"
+}
+```
+<u>Failure (If no name is passed):</u>
+
+```json
+{
+  "success": false,
+  "message": "Speaker name required",
+  "speakerId": null
 }
 ```
 
@@ -30,7 +95,8 @@ List of environment variables used by this cloud function:
 
 - **APPWRITE_FUNCTION_ENDPOINT** - Endpoint of Appwrite project
 - **APPWRITE_FUNCTION_API_KEY** - Appwrite API Key
-<!-- Add your custom environment variables -->
+- **APPWRITE_PROJECT_ID** - Appwrite project Id
+
 
 ## 🚀 Deployment
 
