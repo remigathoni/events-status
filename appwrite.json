@@ -13,6 +13,18 @@
       "events": [],
       "schedule": "",
       "timeout": 15
+    },
+    {
+      "$id": "647d8d37bb51c649712a",
+      "name": "Add session",
+      "runtime": "node-16.0",
+      "path": "functions/Add session",
+      "entrypoint": "src/index.js",
+      "ignore": ["node_modules", ".npm"],
+      "execute": ["any"],
+      "events": [],
+      "schedule": "",
+      "timeout": 15
     }
   ]
 }
