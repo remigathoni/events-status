@@ -2,7 +2,6 @@ const sdk = require("node-appwrite");
 
 module.exports = async function (req, res) {
   const client = new sdk.Client();
-  const avatars = new sdk.Avatars(client);
   const databases = new sdk.Databases(client);
   const { ID } = require("node-appwrite");
 
@@ -38,22 +37,17 @@ module.exports = async function (req, res) {
         message: "Speaker name is required",
       });
 
-    if (!imageUrl) {
-      // use avatar
-      imageUrl = avatars.getInitials();
-    }
-    // await databases.createDocument(databaseId, collectionId, ID.unique(), {
-    //   name,
-    //   title,
-    //   twitter,
-    //   linkedin,
-    //   imageUrl,
-    // });
+    await databases.createDocument(databaseId, collectionId, ID.unique(), {
+      name,
+      title,
+      twitter,
+      linkedin,
+      imageUrl,
+    });
 
     res.json({
       success: true,
       message: "Created new session",
-      imageUrl,
     });
   } catch (e) {
     res.json({
